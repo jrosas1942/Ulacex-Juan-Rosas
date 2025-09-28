@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora COSMIC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .info-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .cosmic-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .cosmic-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .cosmic-card:hover {
+            border-color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .cosmic-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .entry { background: #e74c3c; }
+        .exit { background: #f39c12; }
+        .read { background: #27ae60; }
+        .write { background: #9b59b6; }
+        
+        .form-section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid #e9ecef;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            min-width: 200px;
+            color: #2c3e50;
+        }
+        
+        .form-group input {
+            padding: 10px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .results {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .results h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .total-cfp {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .breakdown-item {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 5px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .breakdown-item strong {
+            display: block;
+            font-size: 1.2rem;
+        }
+        
+        .breakdown-item span {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        
+        .btn-calculate {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+        }
+        
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .tips {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .tips h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .tips ul {
+            color: #856404;
+            padding-left: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .form-group label {
+                min-width: auto;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Calculadora COSMIC</h1>
+            <p>Medición de Tamaño Funcional de Software</p>
+        </div>
+        
+        <div class="content">
+            <div class="info-section">
+                <h2>📋 Información del Proyecto</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <input type="text" id="projectName" placeholder="Nombre del proyecto" style="padding: 10px; border: 2px solid #e9ecef; border-radius: 5px;">
+                    <input type="text" id="version" placeholder="Versión" style="padding: 10px; border: 2px solid #e9ecef; border-radius: 5px;">
+                    <input type="date" id="date" style="padding: 10px; border: 2px solid #e9ecef; border-radius: 5px;">
+                </div>
+            </div>
+            
+            <div class="cosmic-types">
+                <div class="cosmic-card">
+                    <h3><span class="icon entry">E</span>Entry (Entrada)</h3>
+                    <p>Datos que ingresan al software desde actores externos. Ejemplos: formularios, APIs de entrada, archivos importados.</p>
+                </div>
+                
+                <div class="cosmic-card">
+                    <h3><span class="icon exit">X</span>Exit (Salida)</h3>
+                    <p>Datos que salen del software hacia actores externos. Ejemplos: reportes, emails, APIs de salida, archivos exportados.</p>
+                </div>
+                
+                <div class="cosmic-card">
+                    <h3><span class="icon read">R</span>Read (Lectura)</h3>
+                    <p>Lectura de datos persistentes. Ejemplos: consultas a base de datos, lectura de archivos de configuración.</p>
+                </div>
+                
+                <div class="cosmic-card">
+                    <h3><span class="icon write">W</span>Write (Escritura)</h3>
+                    <p>Escritura de datos persistentes. Ejemplos: insertar, actualizar o eliminar en base de datos.</p>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3>🔢 Ingresa tus Mediciones</h3>
+                
+                <div class="form-group">
+                    <label for="entries">📥 Movimientos de Entrada (Entry):</label>
+                    <input type="number" id="entries" value="0" min="0">
+                    <small>CFP por entrada: 1</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="exits">📤 Movimientos de Salida (Exit):</label>
+                    <input type="number" id="exits" value="0" min="0">
+                    <small>CFP por salida: 1</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reads">📖 Movimientos de Lectura (Read):</label>
+                    <input type="number" id="reads" value="0" min="0">
+                    <small>CFP por lectura: 1</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="writes">✍️ Movimientos de Escritura (Write):</label>
+                    <input type="number" id="writes" value="0" min="0">
+                    <small>CFP por escritura: 1</small>
+                </div>
+                
+                <button class="btn-calculate" onclick="calculateCOSMIC()">🧮 Calcular Tamaño COSMIC</button>
+            </div>
+            
+            <div class="results" id="results" style="display: none;">
+                <h3>📊 Resultados COSMIC</h3>
+                <div class="total-cfp" id="totalCFP">0</div>
+                <p>Puntos de Función COSMIC (CFP)</p>
+                
+                <div class="breakdown">
+                    <div class="breakdown-item">
+                        <strong id="entryCFP">0</strong>
+                        <span>Entry CFP</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <strong id="exitCFP">0</strong>
+                        <span>Exit CFP</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <strong id="readCFP">0</strong>
+                        <span>Read CFP</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <strong id="writeCFP">0</strong>
+                        <span>Write CFP</span>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                    <p><strong>Interpretación:</strong></p>
+                    <p id="interpretation">Ingresa valores para ver la interpretación</p>
+                </div>
+            </div>
+            
+            <div class="tips">
+                <h4>💡 Consejos para Principiantes</h4>
+                <ul>
+                    <li><strong>Identifica procesos funcionales:</strong> Cada proceso debe ser iniciado por un actor y entregar valor</li>
+                    <li><strong>Cuenta movimientos únicos:</strong> No duplicar movimientos similares</li>
+                    <li><strong>Documenta tus decisiones:</strong> Mantén registro de qué contaste y por qué</li>
+                    <li><strong>Revisa con el equipo:</strong> Valida tus mediciones con desarrolladores y analistas</li>
+                    <li><strong>Proyectos pequeños:</strong> 1-50 CFP | <strong>Medianos:</strong> 51-300 CFP | <strong>Grandes:</strong> 300+ CFP</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Establecer fecha actual por defecto
+        document.getElementById('date').valueAsDate = new Date();
+        
+        function calculateCOSMIC() {
+            const entries = parseInt(document.getElementById('entries').value) || 0;
+            const exits = parseInt(document.getElementById('exits').value) || 0;
+            const reads = parseInt(document.getElementById('reads').value) || 0;
+            const writes = parseInt(document.getElementById('writes').value) || 0;
+            
+            // En COSMIC, cada movimiento de datos = 1 CFP
+            const entryCFP = entries * 1;
+            const exitCFP = exits * 1;
+            const readCFP = reads * 1;
+            const writeCFP = writes * 1;
+            
+            const totalCFP = entryCFP + exitCFP + readCFP + writeCFP;
+            
+            // Actualizar resultados
+            document.getElementById('totalCFP').textContent = totalCFP;
+            document.getElementById('entryCFP').textContent = entryCFP;
+            document.getElementById('exitCFP').textContent = exitCFP;
+            document.getElementById('readCFP').textContent = readCFP;
+            document.getElementById('writeCFP').textContent = writeCFP;
+            
+            // Interpretación del tamaño
+            let interpretation = '';
+            if (totalCFP === 0) {
+                interpretation = 'No se han ingresado mediciones';
+            } else if (totalCFP <= 50) {
+                interpretation = `🟢 Proyecto Pequeño (${totalCFP} CFP) - Típicamente 1-3 meses de desarrollo`;
+            } else if (totalCFP <= 300) {
+                interpretation = `🟡 Proyecto Mediano (${totalCFP} CFP) - Típicamente 3-12 meses de desarrollo`;
+            } else {
+                interpretation = `🔴 Proyecto Grande (${totalCFP} CFP) - Típicamente más de 12 meses de desarrollo`;
+            }
+            
+            document.getElementById('interpretation').textContent = interpretation;
+            
+            // Mostrar resultados
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Calcular automáticamente cuando cambien los valores
+        ['entries', 'exits', 'reads', 'writes'].forEach(id => {
+            document.getElementById(id).addEventListener('input', calculateCOSMIC);
+        });
+        
+        // Función para exportar resultados
+        function exportResults() {
+            const projectName = document.getElementById('projectName').value || 'Proyecto Sin Nombre';
+            const version = document.getElementById('version').value || '1.0';
+            const date = document.getElementById('date').value || new Date().toISOString().split('T')[0];
+            
+            const entries = parseInt(document.getElementById('entries').value) || 0;
+            const exits = parseInt(document.getElementById('exits').value) || 0;
+            const reads = parseInt(document.getElementById('reads').value) || 0;
+            const writes = parseInt(document.getElementById('writes').value) || 0;
+            const totalCFP = entries + exits + reads + writes;
+            
+            const csvContent = `Medición COSMIC - ${projectName}
+Versión,${version}
+Fecha,${date}
+
+Tipo de Movimiento,Cantidad,CFP
+Entry (Entrada),${entries},${entries}
+Exit (Salida),${exits},${exits}
+Read (Lectura),${reads},${reads}
+Write (Escritura),${writes},${writes}
+
+TOTAL CFP,${totalCFP}`;
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `COSMIC_${projectName.replace(/\s+/g, '_')}_${date}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Agregar botón de exportación después de calcular
+        document.querySelector('.btn-calculate').addEventListener('click', function() {
+            setTimeout(() => {
+                if (!document.getElementById('exportBtn')) {
+                    const exportBtn = document.createElement('button');
+                    exportBtn.id = 'exportBtn';
+                    exportBtn.className = 'btn-calculate';
+                    exportBtn.style.marginLeft = '10px';
+                    exportBtn.innerHTML = '💾 Exportar Resultados';
+                    exportBtn.onclick = exportResults;
+                    this.parentNode.appendChild(exportBtn);
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>
